@@ -12,7 +12,10 @@ import type {
 } from "./testgen-types";
 
 const API_BASE =
-  import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
+  import.meta.env.VITE_API_URL ??
+  (typeof window !== "undefined" && window.location.hostname !== "localhost"
+    ? "https://ai-teatgen-pro.onrender.com/api"
+    : "http://localhost:8000/api");
 
 class ApiError extends Error {
   constructor(
