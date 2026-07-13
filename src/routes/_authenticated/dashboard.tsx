@@ -180,21 +180,7 @@ function DashboardPage() {
         </div>
       </div>
 
-      {/* Real-time Collaboration Vibe */}
-      <div className="flex items-center justify-between bg-primary/5 border border-primary/10 rounded-lg p-2.5 text-xs text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span>Live Sync Active: <strong className="text-foreground">3 QA Architects</strong> editing this project.</span>
-        </div>
-        <div className="flex -space-x-1.5 overflow-hidden">
-          <div className="inline-block h-6 w-6 rounded-full ring-2 ring-background bg-teal-500 text-[10px] text-white flex items-center justify-center font-bold">G</div>
-          <div className="inline-block h-6 w-6 rounded-full ring-2 ring-background bg-indigo-500 text-[10px] text-white flex items-center justify-center font-bold">D</div>
-          <div className="inline-block h-6 w-6 rounded-full ring-2 ring-background bg-amber-500 text-[10px] text-white flex items-center justify-center font-bold">A</div>
-        </div>
-      </div>
+
 
       {/* Grid: Overview Stats */}
       <div className="grid gap-4 sm:grid-cols-4">

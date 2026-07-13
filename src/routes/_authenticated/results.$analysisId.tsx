@@ -193,20 +193,7 @@ function ResultsPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-6 md:p-10">
-      {/* Real-time Collaboration Vibe */}
-      <div className="flex items-center justify-between bg-primary/5 border border-primary/10 rounded-lg p-2.5 text-xs text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span>Live Sync Active: <strong className="text-foreground">2 QA Engineers</strong> reviewing these results.</span>
-        </div>
-        <div className="flex -space-x-1.5 overflow-hidden">
-          <div className="inline-block h-6 w-6 rounded-full ring-2 ring-background bg-teal-500 text-[10px] text-white flex items-center justify-center font-bold">G</div>
-          <div className="inline-block h-6 w-6 rounded-full ring-2 ring-background bg-indigo-500 text-[10px] text-white flex items-center justify-center font-bold">D</div>
-        </div>
-      </div>
+
 
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
