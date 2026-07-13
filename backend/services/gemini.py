@@ -1,5 +1,4 @@
-"""Google Gemini API wrapper — replaces the Lovable AI gateway."""
-
+import asyncio
 import json
 import os
 import re
@@ -37,42 +36,55 @@ async def call_gemini(
             "config",
         )
 
-    try:
-        model = genai.GenerativeModel(
-            model_name=_model_name,
-            system_instruction=system_prompt,
-            generation_config=genai.GenerationConfig(
-                temperature=temperature,
-            ),
-        )
+    max_retries = 3
+    initial_delay = 3.0  # seconds
 
-        response = model.generate_content(user_prompt)
-
-        if not response or not response.text:
-            raise TestGenError(
-                "AI returned an empty response. Please try again.", "ai_empty"
+    for attempt in range(max_retries + 1):
+        try:
+            model = genai.GenerativeModel(
+                model_name=_model_name,
+                system_instruction=system_prompt,
+                generation_config=genai.GenerationConfig(
+                    temperature=temperature,
+                ),
             )
 
-        return response.text
+            # Use thread executor or call directly since it is synchronous
+            response = model.generate_content(user_prompt)
 
-    except TestGenError:
-        raise
-    except Exception as e:
-        error_msg = str(e).lower()
-        if "429" in error_msg or "resource exhausted" in error_msg:
+            if not response or not response.text:
+                raise TestGenError(
+                    "AI returned an empty response. Please try again.", "ai_empty"
+                )
+
+            return response.text
+
+        except TestGenError:
+            raise
+        except Exception as e:
+            error_msg = str(e).lower()
+            is_rate_limit = "429" in error_msg or "resource exhausted" in error_msg or "quota" in error_msg
+            
+            if is_rate_limit and attempt < max_retries:
+                delay = initial_delay * (2 ** attempt)
+                print(f"Gemini API rate limited (429). Retrying in {delay}s... (Attempt {attempt + 1}/{max_retries})")
+                await asyncio.sleep(delay)
+                continue
+                
+            if "429" in error_msg or "resource exhausted" in error_msg:
+                raise TestGenError(
+                    "AI rate limit reached. Please wait a moment and try again.",
+                    "rate_limit",
+                )
+            if "quota" in error_msg:
+                raise TestGenError(
+                    "AI usage quota exhausted. Check your API key billing.",
+                    "credits",
+                )
+            print(f"Gemini API call failed: {e}")
             raise TestGenError(
-                "AI rate limit reached. Please wait a moment and try again.",
-                "rate_limit",
+                "Could not reach the AI service. Please try again.", "network"
             )
-        if "quota" in error_msg:
-            raise TestGenError(
-                "AI usage quota exhausted. Check your API key billing.",
-                "credits",
-            )
-        print(f"Gemini API call failed: {e}")
-        raise TestGenError(
-            "Could not reach the AI service. Please try again.", "network"
-        )
 
 
 def parse_model_json(raw: str) -> dict:
