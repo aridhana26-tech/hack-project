@@ -37,7 +37,7 @@ async def call_gemini(
         )
 
     max_retries = 3
-    initial_delay = 3.0  # seconds
+    initial_delay = 15.0  # seconds
 
     for attempt in range(max_retries + 1):
         try:
