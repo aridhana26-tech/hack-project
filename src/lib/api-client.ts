@@ -14,7 +14,9 @@ import type {
 const API_BASE =
   import.meta.env.VITE_API_URL ??
   (typeof window !== "undefined" && window.location.hostname !== "localhost"
-    ? "https://ai-teatgen-pro.onrender.com/api"
+    ? (window.location.hostname.includes("teatgen")
+      ? "https://ai-testgen-pro-backend.onrender.com/api"
+      : `${window.location.origin}/api`)
     : "http://localhost:8000/api");
 
 class ApiError extends Error {
