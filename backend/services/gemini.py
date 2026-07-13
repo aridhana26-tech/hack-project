@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 _api_key = os.getenv("GEMINI_API_KEY", "")
-_model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+_model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 
 if _api_key and _api_key != "your_gemini_api_key_here":
     genai.configure(api_key=_api_key)
