@@ -11,13 +11,21 @@ import type {
   ChatMessage,
 } from "./testgen-types";
 
-const API_BASE =
-  import.meta.env.VITE_API_URL ??
-  (typeof window !== "undefined" && window.location.hostname !== "localhost"
-    ? (window.location.hostname.includes("teatgen")
-      ? "https://ai-testgen-pro-backend.onrender.com/api"
-      : `${window.location.origin}/api`)
-    : "http://localhost:8000/api");
+const getApiBase = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && !envUrl.includes("ai-teatgen-pro.onrender.com")) {
+    return envUrl;
+  }
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+    if (window.location.hostname.includes("teatgen")) {
+      return "https://ai-testgen-pro-backend.onrender.com/api";
+    }
+    return `${window.location.origin}/api`;
+  }
+  return "http://localhost:8000/api";
+};
+
+const API_BASE = getApiBase();
 
 class ApiError extends Error {
   constructor(
