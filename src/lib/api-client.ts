@@ -12,16 +12,17 @@ import type {
 } from "./testgen-types";
 
 const getApiBase = () => {
+  // Use env variable if explicitly set (works for both local and deployed builds)
   const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl && !envUrl.includes("ai-teatgen-pro.onrender.com")) {
+  if (envUrl) {
     return envUrl;
   }
+  // Fallback for deployed site when env var is not baked in
   if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
-    if (window.location.hostname.includes("teatgen")) {
-      return "https://ai-testgen-pro-backend.onrender.com/api";
-    }
-    return `${window.location.origin}/api`;
+    // Always point to the correct production backend
+    return "https://ai-testgen-pro-backend.onrender.com/api";
   }
+  // Local development
   return "http://localhost:8000/api";
 };
 
