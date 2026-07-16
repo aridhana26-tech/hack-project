@@ -11,19 +11,19 @@ import type {
   ChatMessage,
 } from "./testgen-types";
 
+const PROD_API = "https://ai-testgen-pro-backend.onrender.com/api";
+
 const getApiBase = () => {
-  // Use env variable if explicitly set (works for both local and deployed builds)
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl) {
-    return envUrl;
+  // Local development: use local backend
+  if (
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1")
+  ) {
+    return "http://localhost:8000/api";
   }
-  // Fallback for deployed site when env var is not baked in
-  if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
-    // Always point to the correct production backend
-    return "https://ai-testgen-pro-backend.onrender.com/api";
-  }
-  // Local development
-  return "http://localhost:8000/api";
+  // Production / deployed: always use the real backend
+  return PROD_API;
 };
 
 const API_BASE = getApiBase();
